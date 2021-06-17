@@ -71,96 +71,93 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-<script>
-    // here js code 
-
-    //1- when page is loaded.. I need to do two actions
-    // first: I need to load data ( products ) from server by using LoadProducts () function
-
-    // sec: I need to get how many product in cart page by using setCartNumber(); function
-    window.onload = function() {
-        LoadProducts ();
-        setCartNumber();
-};
-
-    // What this function does.. load data from server  
-    function LoadProducts (){
-// How fun works?
-//  send request to server to get all list of products
-
-// 1- define the request
-const xhr = new XMLHttpRequest();
-//2- open  the request: Verb "GET" , Link ( URL ) to your server
-xhr.open("GET", "http://localhost:3000/api/teddies", true);
-
-//3- when the request is loaded set the data in the html
-xhr.onload = function(){
-// check if request success
-    if ( this.status === 200) // success
-    {
-
-       items =  JSON.parse(this.responseText); 
-
+        <script>
+          
+            window.onload = function() {
+                LoadProducts ();
+                setCartNumber();
+               
+            };
+         
+            function LoadProducts (){
+        
+        const xhr = new XMLHttpRequest();
+    
+        xhr.open("GET", "http://localhost:3000/api/teddies", true);
+        
      
-        // use data in HTML 
-var overall = "";
-
-// for loop
-for ( var i = 0; i < items.length ; i++ ){
-
-    overall += `<div class="col mb-5">
-                <div class="card h-100" style="width: 18rem;">
-                    <!-- Product image-->
-                    <img class="card-img-top" src="`+ items[i].imageUrl + `" alt="..." />
-                    <!-- Product details-->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Product name-->
-                            <h5 class="fw-bolder">`+ items[i].name +`</h5>
-                            <!-- Product price-->
-                            $ `+ items[i].price + `
+        xhr.onload = function(){
+     
+            if ( this.status === 200) 
+            {
+        
+               items =  JSON.parse(this.responseText); 
+        
+             
+              
+        var overall = "";
+        
+     
+        for ( var i = 0; i < items.length ; i++ ){
+        
+            overall += `<div class="col mb-5">
+                        <div class="card h-100" style="width: 18rem;">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="`+ items[i].imageUrl + `" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">`+ items[i].name +`</h5>
+                                    <!-- Product price-->
+                                    $ `+ items[i].price + `
+                                </div>
+                                <p> `+ items[i].description+`</p>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a class="btn btn-outline-dark mt-auto" href="product-details.html?id=`+items[i]._id+`">View Details</a></div>
+                            </div>
                         </div>
-                        <p> `+ items[i].description+`</p>
-                    </div>
-                    <!-- Product actions-->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center">
-                            <a class="btn btn-outline-dark mt-auto" href="product-details.html?id=`+items[i]._id+`">View Details</a></div>
-                    </div>
-                </div>
-            </div> `
-
-}
-
-       var parentDiv =  document.getElementById("products");
-
-       parentDiv.innerHTML = overall;
-
-
-    }else{ // some error happen 
-
-    }
-}
-
-//4- Send the request
-xhr.send();
-
-    }
- function setCartNumber(){
-        //1- get cart list from localstoarge
-    var productsList = localStorage.getItem('cart');
-
-    //2- check if list == null ( no data in cart page )
-    if(productsList == null  ){
-        document.getElementById('cartQuantity').innerText = 0; 
-    }
-    else{ // there are data in cart page
-        productsList = JSON.parse(productsList);
-        document.getElementById('cartQuantity').innerText = productsList.length; 
-    }
-       
-    }
-</script>
+                    </div> `
+        
+        }
+        
+               var parentDiv =  document.getElementById("products");
+        
+               parentDiv.innerHTML = overall;
+        
+        
+            }else{
+        
+            }
+        
+        
+        
+        }
+        
+        
+        xhr.send();
+        
+            }
+        
+        
+            function setCartNumber(){
+                
+            var productsList = localStorage.getItem('cart');
+        
+        
+            if(productsList == null  ){
+                document.getElementById('cartQuantity').innerText = 0; 
+            }
+            else{ 
+                productsList = JSON.parse(productsList);
+                document.getElementById('cartQuantity').innerText = productsList.length; 
+            }
+               
+            }
+        </script>
 </body>
 </html>
 

@@ -56,43 +56,27 @@
 
 
  <script>
-      // here js code 
-
-    //1- when page is loaded.. I need to do two actions
-    //  first : get the id value from  url 
-    // sec: I need to load data ( product - detials ) from server by using LoadProduct (id) function
-
-    // third: I need to get how many product in cart page by using setCartNumber(); function
+     
    window.onload = function() {
-        // load data from server 
-       
-// first 
+ 
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        //2
         LoadProduct (productId);
 
-        //3
         setCartNumber();
     };
 
-// What? To get product details from server by send id.
 function LoadProduct(productId){
 
-    //How?
-    //  send request to server to get all list of products
 
-// 1- define the request
 const xhr = new XMLHttpRequest();
 
-//2- open  the request: Verb "GET" , Link ( URL ) to your server
 xhr.open("GET", "http://localhost:3000/api/teddies/"+ productId, true);
 
-//3- when the request is loaded set the data in the html
 
 xhr.onload = function(){
-    if ( this.status === 200) // success
+    if ( this.status === 200) 
     {
         product =  JSON.parse(this.responseText); 
 
@@ -122,60 +106,45 @@ xhr.onload = function(){
         document.getElementById("product").innerHTML = productHML;
     }
 
-    else{ // if something wrong
+    else{ 
 
     }
 
 };
-//4- Send the request
+
 xhr.send();
 
     }
 
-    
-// What? To Add Product to the cart 
 function  addProductToCart(product){
-// How?
 
-// get quantity
 var myvalue = document.getElementById('inputQuantity').value ;
-// add quantity to prduct information
+
 product["quantity"] = myvalue;
 
-// add item to Cart ...
-// 1- define new array productsInCart 
 
-var productsInCart = []; // empty = remove any exsit
+var productsInCart = []; 
 
-//2- check if already there are any products in cart before
-if ( localStorage.getItem("cart")  == null ){ // if no product inside localstorage
+if ( localStorage.getItem("cart")  == null ){ 
 
-    // push product to the array
     productsInCart.push(product);
 
-}else{ // there are products inside local storage 
+}else{
+ 
+    productsInCart = JSON.parse(localStorage.getItem("cart")); 
 
-    // set the data from local storage to the array 
-    productsInCart = JSON.parse(localStorage.getItem("cart")); // list not empty .
-
-// Check in this product already exsit in the array or not 
-//if not in the array
-//  findIndex ( index = 0 1 2 3 ) or (index =   -1)
 var productIndex = productsInCart.findIndex( a=>a._id == product._id );
-if(productIndex < 0){ // == -1 if not
+if(productIndex < 0){ 
     productsInCart.push(product);
 }else{
-    //already here in the list - do not add again
-    // increase the qunatity of the product
+  
     productsInCart[productIndex].quantity = +productsInCart[productIndex].quantity + +product.quantity;
 }
 
 }
 
-// set array in localstorage with name' cart' & value = array
 localStorage.setItem("cart" , JSON.stringify(productsInCart) );
 
-// set how many items in the cart number
 document.getElementById('cartQuantity').innerText = productsInCart.length;
 
     }

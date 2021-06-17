@@ -5,52 +5,44 @@ window.onload = function() {
     setCartNumber();
 };
 
-// array name // empty array
 var products = [];
 
 
-// what? to load products data from cart 
+
 function loadProductFromCart() {
-// 1- get information from local storage
+
 var productsInCart = localStorage.getItem('cart');
 
-// 2- check if  productsInCart  = null or not
+
 if(productsInCart == null ){
-  // Show (No Data inside the card ) // later   
+
 }
 
-else{ // There ara data in productsInCart = array 
+else{ 
 
     products =JSON.parse(productsInCart) ;
 
-
-// create HTML Code with products data ...
 createCardElements();
 
-//What?  To Calculate The Overall Total Price 
+
 calculateTotalPrice();
 }
 
-}// end 
+}
 
 
 
 
-// What? design our html code  
 function createCardElements() {
  
-    //How
-// 1-  document.createElement("tr")
-//2- Give Class to the element
-//3- innerHTML = "my HTML code"
+ 
 
 
     const element = (product) => {
 
-        // create table row
+      
         const tr = document.createElement('tr');
-        
-        // create product details img - name - description. element
+       
         const th = document.createElement('th');
         th.scope = 'row';
         th.innerHTML = `
@@ -65,12 +57,12 @@ function createCardElements() {
         </div>
         `;
 
-        // create price element
+      
         const price = document.createElement('td');
         price.className = 'align-middle';
         price.innerHTML = `<strong>$${product.price}</strong>`;
 
-        // create quantity element 
+    
         const quantity = document.createElement('td');
         quantity.className = 'align-middle';
         
@@ -115,33 +107,30 @@ function createCardElements() {
         
         quantity.appendChild(quantityForm);
 
-        // create total price element
+      
         const totalPrice = document.createElement('td');
         totalPrice.className = 'align-middle';
         totalPrice.id = `t${+product._id}`;
         totalPrice.innerHTML = `${+product.price * +product.quantity}$`;
 
-        // create delete element
+      
         const options = document.createElement('td');
         options.className = 'align-middle text-center';
         const removeOption = document.createElement('a');
         removeOption.className = 'text-danger';
         removeOption.href = '#';
         removeOption.innerHTML = '<i class="bi bi-trash"></i>';
-        removeOption.onclick = () => { // when click to remove function
-            //1- remove item from array
+        removeOption.onclick = () => { 
+          
             products.splice(products.indexOf(product), 1);
 
-             //2- remove item from html
+            
             document.getElementById('products').removeChild(tr);
 
-            //3- set cart information in local storage
             localStorage.setItem('cart', JSON.stringify(products));
 
-             //4- calculateTotalPrice
             calculateTotalPrice();
 
-            //5-  change the number of cart in the header
             setCartNumber();
         }
         options.appendChild(removeOption);
@@ -166,18 +155,15 @@ function createCardElements() {
 }
 
 
-// 
+
 function calculateTotalPrice() {
 
-    //How 
-    // 1- document.getElementById
+   
     const totalPriceElement = document.getElementById('totalPrice');
 
-    //2- Calculate the total price = (product 1 price * quantity) + (product 2 price * quantity 2) .. etc
-
+    
     const totalPrice = products.reduce((acc, product) => acc + (product.price * product.quantity), 0);
 
-    //3-element. innerHTML = " My Code"
     totalPriceElement.innerHTML = `${totalPrice}`;
 }
 
@@ -188,7 +174,7 @@ function checkout() {
 
 
 function addToCart(product){
-    // debugger
+   
     let productsList =[];
     var productsInCart = localStorage.getItem('cart');
         product["quantity"] = document.getElementById("inputQuantity").value;
@@ -200,17 +186,17 @@ function addToCart(product){
         document.getElementById('cartQuantity').innerText = 1;
         console.log("product addedd to the cart")
     }else{
-        // debugger
+     
         var products = JSON.parse(productsInCart);
            
 
         var productExsits = products.findIndex( a=>a._id == product._id );
-        if(productExsits < 0){ // == -1 if not
+        if(productExsits < 0){ 
             products.push(product);
             localStorage.setItem('cart',JSON.stringify(product) );
             document.getElementById('cartQuantity').innerText = products.length;
         }else{
-            //already here in the list - do not add again
+          
         }
 
     }

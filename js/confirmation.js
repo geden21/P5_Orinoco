@@ -23,25 +23,19 @@ function setCartNumber(){
        
     }
 
-    // used to send data to the server
 function submit(body) {
-console.log(body); // data to send 
+console.log(body);
 
 
-//1- defiind the request 
     const xhr = new XMLHttpRequest();
-  //2- open the request == Verb , Url
     xhr.open("POST", 'http://localhost:3000/api/teddies/order', true);
 
-    // Extra step >> defind type of datayou send to the sever ( JSON Type)
     xhr.setRequestHeader('Content-type', 'application/json');
 
-    //3-  onload 
+ 
     xhr.onload = function () {
         console.log(this.status)
-        if (this.status === 201) { // success
-
-            // Changing string data into JSON Object
+        if (this.status === 201) { 
             datafromServer = JSON.parse(this.responseText);
             console.log(datafromServer);
             console.log("Success");
@@ -54,7 +48,6 @@ console.log(body); // data to send
             console.log("File not found");
         }
     }
-//4- send the request -- with datain variable named ( body)
     xhr.send(body);
 }
 
@@ -62,8 +55,6 @@ let products = [];
 
 
 function loadProductFromCart() {
-    // debugger;
-    // let products =[];
     var productsInCart = localStorage.getItem('cart');
     if(productsInCart == null || productsInCart == undefined ){
     }
@@ -78,10 +69,8 @@ function loadProductFromCart() {
 function createCardElements() {
     const element = (product) => {
 
-        // create table row
         const tr = document.createElement('tr');
-        
-        // create product details img - name - description. element
+       
         const th = document.createElement('th');
         th.scope = 'row';
         th.innerHTML = `
@@ -95,12 +84,11 @@ function createCardElements() {
         </div>
         `;
 
-        // create price element
         const price = document.createElement('td');
         price.className = 'align-middle';
         price.innerHTML = `<strong>$${product.price}</strong>`;
 
-        // create quantity element
+
         const quantity = document.createElement('td');
         quantity.className = 'align-middle';
         const quantityForm = document.createElement('form');
@@ -117,7 +105,7 @@ function createCardElements() {
         
         quantity.appendChild(quantityForm);
 
-        // create total price element
+     
         const totalPrice = document.createElement('td');
         totalPrice.className = 'align-middle';
         totalPrice.id = `t${+product._id}`;
