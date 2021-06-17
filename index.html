@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Orinoco - Product Details</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link href="css/styles.css" rel="stylesheet" /> 
+
+    </head>
+    <body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="index.html"> <img src="assets/logo.png" alt="logo" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          
+                <a class="btn btn-outline-dark" href="cart.html">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill" id="cartQuantity">0</span>
+                </a>
+            
+        </div>
+    </div>
+</nav>
+
+<!-- Section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" id="products">
+
+            <div class="col-4 mb-5">
+                <div class="card h-100">
+                    <!-- Product image-->
+                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name-->
+                            <h5 class="fw-bolder">Fancy Product</h5>
+                            <!-- Product price-->
+                            $40.00 - $80.00
+                        </div>
+                    </div>
+                    <!-- Product actions-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Orinoco 2021</p></div>
+</footer>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<script>
+    // here js code 
+
+    //1- when page is loaded.. I need to do two actions
+    // first: I need to load data ( products ) from server by using LoadProducts () function
+
+    // sec: I need to get how many product in cart page by using setCartNumber(); function
+    window.onload = function() {
+        LoadProducts ();
+        setCartNumber();
+};
+
+    // What this function does.. load data from server  
+    function LoadProducts (){
+// How fun works?
+//  send request to server to get all list of products
+
+// 1- define the request
+const xhr = new XMLHttpRequest();
+//2- open  the request: Verb "GET" , Link ( URL ) to your server
+xhr.open("GET", "http://localhost:3000/api/teddies", true);
+
+//3- when the request is loaded set the data in the html
+xhr.onload = function(){
+// check if request success
+    if ( this.status === 200) // success
+    {
+
+       items =  JSON.parse(this.responseText); 
+
+     
+        // use data in HTML 
+var overall = "";
+
+// for loop
+for ( var i = 0; i < items.length ; i++ ){
+
+    overall += `<div class="col mb-5">
+                <div class="card h-100" style="width: 18rem;">
+                    <!-- Product image-->
+                    <img class="card-img-top" src="`+ items[i].imageUrl + `" alt="..." />
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name-->
+                            <h5 class="fw-bolder">`+ items[i].name +`</h5>
+                            <!-- Product price-->
+                            $ `+ items[i].price + `
+                        </div>
+                        <p> `+ items[i].description+`</p>
+                    </div>
+                    <!-- Product actions-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <a class="btn btn-outline-dark mt-auto" href="product-details.html?id=`+items[i]._id+`">View Details</a></div>
+                    </div>
+                </div>
+            </div> `
+
+}
+
+       var parentDiv =  document.getElementById("products");
+
+       parentDiv.innerHTML = overall;
+
+
+    }else{ // some error happen 
+
+    }
+}
+
+//4- Send the request
+xhr.send();
+
+    }
+ function setCartNumber(){
+        //1- get cart list from localstoarge
+    var productsList = localStorage.getItem('cart');
+
+    //2- check if list == null ( no data in cart page )
+    if(productsList == null  ){
+        document.getElementById('cartQuantity').innerText = 0; 
+    }
+    else{ // there are data in cart page
+        productsList = JSON.parse(productsList);
+        document.getElementById('cartQuantity').innerText = productsList.length; 
+    }
+       
+    }
+</script>
+</body>
+</html>
+
+ 
