@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Orinoco - Product Details</title>
+                <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link href="css/styles.css" rel="stylesheet" /> 
+    </head>
+
+    <body>
+      
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="index.html">        
+                <img src="assets/logo.png" alt="logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            
+                <a class="btn btn-outline-dark" href="cart.html">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill" id="cartQuantity">0</span>
+                </a>
+            
+        </div>
+    </div>
+</nav>
+
+<!-- Section-->
+ <!-- Product section-->
+ <section class="py-5">
+     <div class="container px-4 px-lg-5 my-5"  id="product">
+    </div>
+</section>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy;Orinoco 2021</p></div>
+</footer>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+
+ <script>
+     
+   window.onload = function() {
+ 
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        LoadProduct (productId);
+
+        setCartNumber();
+    };
+
+function LoadProduct(productId){
+
+
+const xhr = new XMLHttpRequest();
+
+xhr.open("GET", "http://localhost:3000/api/teddies/"+ productId, true);
+
+
+xhr.onload = function(){
+    if ( this.status === 200) 
+    {
+        product =  JSON.parse(this.responseText); 
+
+        var productHML = `
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="`+product.imageUrl+`" alt="..." /></div>
+            <div class="col-md-6">
+                <h1 class="display-5 fw-bolder">`+product.name+`</h1>
+                <div class="fs-5 mb-5">
+                    <br />
+                    <b>Price:</b>   <span>$`+product.price+`</span>
+                    <br />
+                    <b>Colors:</b> 
+                    <select id="mySelect" class="form-control"> 
+                            </select>
+                    
+                    
+                </div>
+                <p class="lead">`+product.description+`</p>
+                <div class="d-flex">
+                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button" onclick="addProductToCart(product)">
+                        <i class="bi-cart-fill me-1"></i>
+                        Add to cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        `
+
+        document.getElementById("product").innerHTML = productHML;
+        fillColors(product.colors);
+    }
+
+    else{ 
+
+    }
+
+};
+
+xhr.send();
+
+    }
+
+function fillColors(colors){
+    var select = document.getElementById("mySelect"); 
+var options =colors; 
+
+select.innerHTML = "";
+// Populate list with options:
+for(var i = 0; i < options.length; i++) {
+    var opt = options[i];
+    select.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+}
+}
+
+function  addProductToCart(product){
+
+var myvalue = document.getElementById('inputQuantity').value ;
+
+product["quantity"] = myvalue;
+
+var colorValue = document.getElementById('mySelect').value ;
+
+product["colorValue"] = colorValue;
+
+
+var productsInCart = []; 
+
+if ( localStorage.getItem("cart")  == null ){ 
+
+    productsInCart.push(product);
+
+}else{
+ 
+    productsInCart = JSON.parse(localStorage.getItem("cart")); 
+
+var productIndex = productsInCart.findIndex( a=>a._id == product._id );
+if(productIndex < 0){ 
+    productsInCart.push(product);
+}else{
+  
+    productsInCart[productIndex].quantity = +productsInCart[productIndex].quantity + +product.quantity;
+}
+
+}
+
+localStorage.setItem("cart" , JSON.stringify(productsInCart) );
+
+document.getElementById('cartQuantity').innerText = productsInCart.length;
+
+    }
+
+    function setCartNumber(){
+    var productsList = localStorage.getItem('cart');
+    if(productsList == null  ){
+        document.getElementById('cartQuantity').innerText = 0; 
+    }
+    else{
+        productsList = JSON.parse(productsList);
+        document.getElementById('cartQuantity').innerText = productsList.length; 
+    }
+       
+    }
+
+</script>
+
+    </body>
+</html>
+
+
+
+
+
