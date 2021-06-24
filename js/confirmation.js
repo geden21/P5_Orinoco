@@ -43,6 +43,8 @@ console.log(body);
             "Your order is confirmed successfully- orderId= " +datafromServer.orderId;
 
             document.getElementById('alertSuccess').classList.remove('d-none');
+            localStorage.clear();
+            setCartNumber();
         }
         else {
             console.log("File not found");

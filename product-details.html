@@ -89,7 +89,11 @@ xhr.onload = function(){
                     <br />
                     <b>Price:</b>   <span>$`+product.price+`</span>
                     <br />
-                    <b>Colors:</b> <span>`+product.colors.toString()+`</span>
+                    <b>Colors:</b> 
+                    <select id="mySelect" class="form-control"> 
+                            </select>
+                    
+                    
                 </div>
                 <p class="lead">`+product.description+`</p>
                 <div class="d-flex">
@@ -104,6 +108,7 @@ xhr.onload = function(){
         `
 
         document.getElementById("product").innerHTML = productHML;
+        fillColors(product.colors);
     }
 
     else{ 
@@ -116,11 +121,27 @@ xhr.send();
 
     }
 
+function fillColors(colors){
+    var select = document.getElementById("mySelect"); 
+var options =colors; 
+
+select.innerHTML = "";
+// Populate list with options:
+for(var i = 0; i < options.length; i++) {
+    var opt = options[i];
+    select.innerHTML += "<option value=\"" + opt + "\">" + opt + "</option>";
+}
+}
+
 function  addProductToCart(product){
 
 var myvalue = document.getElementById('inputQuantity').value ;
 
 product["quantity"] = myvalue;
+
+var colorValue = document.getElementById('mySelect').value ;
+
+product["colorValue"] = colorValue;
 
 
 var productsInCart = []; 

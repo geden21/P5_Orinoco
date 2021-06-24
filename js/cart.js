@@ -52,7 +52,9 @@ function createCardElements() {
             <h5 class="mb-0">
                 <a href="#" class="text-dark d-inline-block">${product.name}</a>
             </h5>
+            
             <span class="text-muted font-weight-normal font-italic">${product.description}</span>
+           <br/> <span> Color:<b> ${product.colorValue} </b> </span>
             </div>
         </div>
         `;
