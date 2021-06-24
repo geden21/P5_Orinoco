@@ -171,7 +171,7 @@ function calculateTotalPrice() {
 
 function checkout() {
     localStorage.setItem('cart', JSON.stringify(products));
-    window.location.href = '/confirmation.html';
+    window.location.href = '/P5_Orinoco/confirmation.html';
 }
 
 
